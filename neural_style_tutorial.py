@@ -200,6 +200,7 @@ def image_loader(image_name):
 
 
 style_img = image_loader("styles/bourbon_street.jpg").type(dtype)
+
 content_img = image_loader("suze_test/goat_cropped.jpg").type(dtype)
 
 assert style_img.size() == content_img.size(), \
@@ -228,7 +229,8 @@ unloader = transforms.ToPILImage()  # reconvert into PIL image
 
 def imshow(tensor, title=None):
     image = tensor.clone().cpu()  # we clone the tensor to not do changes on it
-    image = image.view(3, imsize, imsize)  # remove the fake batch dimension
+    image = image.squeeze(0) # remove the fake batch dimension
+    # image = image.view(3, imsize, imsize)  # remove the fake batch dimension
     image = unloader(image)
     # plt.imshow(image)
     if title is not None:
@@ -238,7 +240,8 @@ def imshow(tensor, title=None):
 
 def imsave(tensor, fname):
     image = tensor.clone().cpu()  # we clone the tensor to not do changes on it
-    image = image.view(3, imsize, imsize)  # remove the fake batch dimension
+    # size = image.size()
+    image = image.squeeze(0) # remove the fake batch dimension
     image = unloader(image)
 
     image.save(fname)
