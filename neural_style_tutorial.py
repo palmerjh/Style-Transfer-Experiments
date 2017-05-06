@@ -201,7 +201,7 @@ def image_loader(image_name):
 
 style_img = image_loader("styles/bourbon_street.jpg").type(dtype)
 
-content_img = image_loader("suze_test/goat_cropped.jpg").type(dtype)
+content_img = image_loader("suze_test/gnome_cropped.jpg").type(dtype)
 
 assert style_img.size() == content_img.size(), \
     "we need to import style and content images of the same size"
