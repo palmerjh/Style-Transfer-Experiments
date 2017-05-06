@@ -199,7 +199,7 @@ def image_loader(image_name):
     return image
 
 
-style_img = image_loader("styles/bourbon_street.jpg").type(dtype)
+style_img = image_loader("styles/cloth_cropped.jpg").type(dtype)
 
 content_img = image_loader("suze_test/gnome_cropped.jpg").type(dtype)
 
