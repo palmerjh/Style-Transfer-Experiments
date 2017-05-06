@@ -232,6 +232,7 @@ def imshow(tensor, title=None):
     image = unloader(image)
     # plt.imshow(image)
     if title is not None:
+        pass
         # plt.title(title)
     # plt.pause(0.001) # pause a bit so that plots are updated
 
