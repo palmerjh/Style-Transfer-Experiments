@@ -128,7 +128,7 @@ dtype = torch.cuda.FloatTensor if use_cuda else torch.FloatTensor
 
 
 # desired size of the output image
-imsize = 512 if use_cuda else 128  # use small size if no gpu
+imsize = 128 if use_cuda else 128  # use small size if no gpu
 
 loader = transforms.Compose([
     transforms.Scale(imsize),  # scale imported image
@@ -440,6 +440,13 @@ def run_style_transfer(cnn, content_img, style_img, input_img, outfile, num_step
     else:
         print('Second run over optimum epochs...')
 
+    print(num_steps)
+
+    copies = {'cnn' :   copy.deepcopy(cnn),
+              'content_img' : copy.deepcopy(content_img),
+              'style_img' : copy.deepcopy(style_img),
+              'input_img' : copy.deepcopy(input_img) }
+
     print('Building the style transfer model..')
     model, style_losses, content_losses = get_style_model_and_losses(cnn,
         style_img, content_img, style_weight, content_weight)
@@ -453,7 +460,7 @@ def run_style_transfer(cnn, content_img, style_img, input_img, outfile, num_step
 
     print('Optimizing..')
     run = [0]
-    while run[0] <= num_steps:
+    while run[0] < num_steps:
 
         def closure():
             # correct the values of updated input image
@@ -475,6 +482,10 @@ def run_style_transfer(cnn, content_img, style_img, input_img, outfile, num_step
                 min_nEpochs[0] = run[0]
                 min_nEpochs[1] = total_score
 
+            if run[0] % 10 == 0:
+                print('cur: %d\t%f' % (run[0], total_score))
+                print('min: %d\t%f' % (min_nEpochs[0], min_nEpochs[1]))
+
             if run[0] % 50 == 0:
                 out1 = "run {}:".format(run)
                 print(out1)
@@ -494,12 +505,18 @@ def run_style_transfer(cnn, content_img, style_img, input_img, outfile, num_step
     # a last correction...
     input_param.data.clamp_(0, 1)
 
+    print(min_nEpochs)
+
     if findMin:
         out.close()
         # overtrained....need to redo learning up until optimal number of epochs
         if not (num_steps == min_nEpochs[0]):
-            return run_style_transfer(cnn, content_img, style_img, input_img, outfile,
-                                num_steps=min_nEpochs[0], findMin=False)
+            return run_style_transfer(copies['cnn'],
+                                      copies['content_img'],
+                                      copies['style_img'],
+                                      copies['input_img'],
+                                      outfile,
+                                      num_steps=min_nEpochs[0], findMin=False)
 
     return input_param.data
 
