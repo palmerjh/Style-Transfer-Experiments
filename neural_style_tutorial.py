@@ -463,6 +463,7 @@ def run_style_transfer(cnn, content_img, style_img, input_img, outfile, num_step
     while run[0] < num_steps:
 
         def closure():
+
             # correct the values of updated input image
             input_param.data.clamp_(0, 1)
 
@@ -502,7 +503,11 @@ def run_style_transfer(cnn, content_img, style_img, input_img, outfile, num_step
 
             return total_score
 
-        optimizer.step(closure)
+        # don't ask me why this is required cuz I don't know
+        if run[0] >= num_steps:
+            print('Why am I here?')
+        else:
+            optimizer.step(closure)
 
     # a last correction...
     input_param.data.clamp_(0, 1)
