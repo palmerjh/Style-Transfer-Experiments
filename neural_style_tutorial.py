@@ -60,7 +60,7 @@ styles_dir = 'styles'
 results_dir = 'results'
 
 square_styles = ['field',
-                 'clouds'
+                 'clouds',
                  'mountain',
                  'stars_square',
                  'stars2_square',
