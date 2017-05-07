@@ -500,9 +500,9 @@ def run_style_transfer(cnn, content_img, style_img, input_img, outfile, num_step
             # cur_nEpochs[0] = run[0]
             # cur_nEpochs[1] = total_score_scalar
             #
-            if run[0] % 10 == 0:
-                print('cur: %d\t%f' % (run[0], total_score_scalar))
-                print('min: %d\t%f' % (min_nEpochs[0], min_nEpochs[1]))
+            # if run[0] % 10 == 0:
+            #     print('cur: %d\t%f' % (run[0], total_score_scalar))
+            #     print('min: %d\t%f' % (min_nEpochs[0], min_nEpochs[1]))
 
             if run[0] % 50 == 0:
                 out1 = "run {}:".format(run)
