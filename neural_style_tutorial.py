@@ -462,14 +462,11 @@ def run_style_transfer(cnn, content_img, style_img, input_img, outfile, num_step
     print('Optimizing..')
     run = [0]
     while run[0] < num_steps:
-        print('outside --- %d' % run[0])
 
         def closure():
-            print('inside --- %d' % run[0])
 
             # correct the values of updated input image
             input_param.data.clamp_(0, 1)
-            print(input_param.data[0][0][42][42])
 
             optimizer.zero_grad()
             model(input_param)
@@ -521,21 +518,15 @@ def run_style_transfer(cnn, content_img, style_img, input_img, outfile, num_step
 
             return total_score
 
-        # don't ask me why this is required cuz I don't know
-        if run[0] >= num_steps:
-            print('outside - Why am I here?')
-        elif run[0] == num_steps - 1:
-            print('outside - should be done now')
-            optimizer.step(closure)
-        else:
-            optimizer.step(closure)
+        optimizer.step(closure)
+
+    print(cur_nEpochs == min_nEpochs)
 
     # a last correction...
     input_param.data.clamp_(0, 1)
 
-    print(min_nEpochs)
-    print(cur_nEpochs)
-    print(cur_nEpochs == min_nEpochs)
+    # make nEpochs divisible by 20 to avoid overtraining by closure
+    min_nEpochs[0] -= min_nEpochs[0] % 20
 
     if findMin:
         out.close()
