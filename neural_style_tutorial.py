@@ -128,7 +128,7 @@ dtype = torch.cuda.FloatTensor if use_cuda else torch.FloatTensor
 
 
 # desired size of the output image
-imsize = 128 if use_cuda else 128  # use small size if no gpu
+imsize = 512 if use_cuda else 128  # use small size if no gpu
 
 loader = transforms.Compose([
     transforms.Scale(imsize),  # scale imported image
@@ -453,7 +453,7 @@ def run_style_transfer(cnn, content_img, style_img, input_img, outfile, num_step
     input_param, optimizer = get_input_param_optimizer(input_img)
 
     # keeps track of what number of epochs yields the minimum score
-    # min_nEpochs = [0, 10000]
+    min_nEpochs = [0, 10000]
     # cur_nEpochs = [0, 0]
 
     if findMin:
