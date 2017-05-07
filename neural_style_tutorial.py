@@ -517,7 +517,7 @@ def main():
         if not os.path.exists(c_folder):
             os.makedirs(c_folder)
 
-        print('\n\nTransforming %s.....(%d / %d)' % (content, i, len(content_style_dict)))
+        print('\n\nTransforming %s.....(%d / %d)' % (content, i+1, len(content_style_dict)))
 
         content_img = image_loader(os.path.join(content_dir,'%s.jpg' % content)).type(dtype)
         imsave(content_img.data, os.path.join(c_folder, 'content.jpg'))
@@ -531,7 +531,7 @@ def main():
             assert style_img.size() == content_img.size(), \
                 "we need to import style and content images of the same size"
 
-            print('\n.....Using %s style......(%d / %d)\n' % (style, j, len(content_style_dict[content])))
+            print('\n.....Using %s style......(%d / %d)\n' % (style, j+1, len(content_style_dict[content])))
             # save content again at this level
             imsave(content_img.data, os.path.join(s_folder, 'content.jpg'))
             imsave(style_img.data, os.path.join(s_folder,'style.jpg'))
@@ -548,11 +548,11 @@ def main():
 
             outfile = os.path.join(s_folder,'records.txt')
 
-            # output = run_style_transfer(cnn, content_img, style_img, input_img, outfile)
+            output = run_style_transfer(cnn, content_img, style_img, input_img, outfile)
 
             # plt.figure()
             # imshow(output, title='Output Image')
-            # imsave(output, os.path.join(s_folder,'output.jpg'))
+            imsave(output, os.path.join(s_folder,'output.jpg'))
 
             # sphinx_gallery_thumbnail_number = 4
             # plt.ioff()
