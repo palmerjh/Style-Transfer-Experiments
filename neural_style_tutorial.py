@@ -199,9 +199,9 @@ def image_loader(image_name):
     return image
 
 
-style_img = image_loader("styles/stars_square.jpg").type(dtype)
+style_img = image_loader("styles/field.jpg").type(dtype)
 
-content_img = image_loader("suze_test/wwoof_square.jpg").type(dtype)
+content_img = image_loader("suze_test/jerbear.jpg").type(dtype)
 
 assert style_img.size() == content_img.size(), \
     "we need to import style and content images of the same size"
@@ -561,7 +561,7 @@ def get_input_param_optimizer(input_img):
 # the 0-1 interval.
 #
 
-def run_style_transfer(cnn, content_img, style_img, input_img, num_steps=250,
+def run_style_transfer(cnn, content_img, style_img, input_img, num_steps=600,
                        style_weight=1000, content_weight=1):
     """Run the style transfer."""
     print('Building the style transfer model..')
