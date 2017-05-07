@@ -199,7 +199,7 @@ def image_loader(image_name):
     return image
 
 
-style_img = image_loader("styles/mountain.jpg").type(dtype)
+style_img = image_loader("styles/tree_square.jpg").type(dtype)
 
 content_img = image_loader("suze_test/julianna_dog.jpg").type(dtype)
 
