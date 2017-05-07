@@ -469,6 +469,7 @@ def run_style_transfer(cnn, content_img, style_img, input_img, outfile, num_step
 
             # correct the values of updated input image
             input_param.data.clamp_(0, 1)
+            print(input_param.data[0][0][42][42])
 
             optimizer.zero_grad()
             model(input_param)
