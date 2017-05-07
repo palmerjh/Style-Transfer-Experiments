@@ -453,8 +453,8 @@ def run_style_transfer(cnn, content_img, style_img, input_img, outfile, num_step
     input_param, optimizer = get_input_param_optimizer(input_img)
 
     # keeps track of what number of epochs yields the minimum score
-    min_nEpochs = [0, 10000]
-    cur_nEpochs = [0, 0]
+    # min_nEpochs = [0, 10000]
+    # cur_nEpochs = [0, 0]
 
     if findMin:
         out = open(outfile, 'w')
@@ -497,8 +497,8 @@ def run_style_transfer(cnn, content_img, style_img, input_img, outfile, num_step
             #     pass
             #     #optimizer.step(closure)
             #
-            cur_nEpochs[0] = run[0]
-            cur_nEpochs[1] = total_score_scalar
+            # cur_nEpochs[0] = run[0]
+            # cur_nEpochs[1] = total_score_scalar
             #
             if run[0] % 10 == 0:
                 print('cur: %d\t%f' % (run[0], total_score_scalar))
@@ -523,12 +523,13 @@ def run_style_transfer(cnn, content_img, style_img, input_img, outfile, num_step
     # a last correction...
     input_param.data.clamp_(0, 1)
 
-    print(cur_nEpochs == min_nEpochs)
+    # print(cur_nEpochs == min_nEpochs)
 
     # make nEpochs divisible by 20 to avoid overtraining by closure
     min_nEpochs[0] -= min_nEpochs[0] % 20
 
     if findMin:
+        out.write('Optimum epochs: %d\n\n' % min_nEpochs[0])
         out.close()
         # overtrained....need to redo learning up until optimal number of epochs
         if not (num_steps == min_nEpochs[0]):
