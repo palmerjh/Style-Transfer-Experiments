@@ -432,7 +432,7 @@ def get_input_param_optimizer(input_img):
 # the 0-1 interval.
 #
 
-def run_style_transfer(cnn, content_img, style_img, input_img, outfile, num_steps=600,
+def run_style_transfer(cnn, content_img, style_img, input_img, outfile, num_steps=10,
                        style_weight=1000, content_weight=1, findMin=True):
     """Run the style transfer."""
     if findMin:
@@ -462,8 +462,10 @@ def run_style_transfer(cnn, content_img, style_img, input_img, outfile, num_step
     print('Optimizing..')
     run = [0]
     while run[0] < num_steps:
+        print('outside --- %d' % run[0])
 
         def closure():
+            print('inside --- %d' % run[0])
 
             # correct the values of updated input image
             input_param.data.clamp_(0, 1)
