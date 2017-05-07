@@ -454,7 +454,7 @@ def run_style_transfer(cnn, content_img, style_img, input_img, outfile, num_step
 
     # keeps track of what number of epochs yields the minimum score
     min_nEpochs = [0, 10000]
-    # cur_nEpochs = [0, 0]
+    cur_nEpochs = [0, 0]
 
     if findMin:
         out = open(outfile, 'w')
