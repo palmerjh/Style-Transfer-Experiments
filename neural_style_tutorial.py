@@ -443,9 +443,9 @@ def run_style_transfer(cnn, content_img, style_img, input_img, outfile, num_step
     print(num_steps)
 
     copies = {'cnn' :   copy.deepcopy(cnn),
-              'content_img' : copy.deepcopy(content_img),
-              'style_img' : copy.deepcopy(style_img),
-              'input_img' : copy.deepcopy(input_img) }
+              'content_img' : content_img.clone(),
+              'style_img' : style_img.clone(),
+              'input_img' : input_img.clone() }
 
     print('Building the style transfer model..')
     model, style_losses, content_losses = get_style_model_and_losses(cnn,
