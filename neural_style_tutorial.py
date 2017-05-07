@@ -485,6 +485,16 @@ def run_style_transfer(cnn, content_img, style_img, input_img, outfile, num_step
                 min_nEpochs[0] = run[0]
                 min_nEpochs[1] = total_score_scalar
 
+            # don't ask me why this is required cuz I don't know
+            if run[0] > num_steps:
+                print('Why am I here?')
+            elif run[0] == num_steps:
+                print('should be done now')
+                #optimizer.step(closure)
+            else:
+                pass
+                #optimizer.step(closure)
+
             if run[0] % 10 == 0:
                 print('cur: %d\t%f' % (run[0], total_score_scalar))
                 print('min: %d\t%f' % (min_nEpochs[0], min_nEpochs[1]))
@@ -504,9 +514,9 @@ def run_style_transfer(cnn, content_img, style_img, input_img, outfile, num_step
             return total_score
 
         # don't ask me why this is required cuz I don't know
-        if run[0] > num_steps:
+        if run[0] >= num_steps:
             print('Why am I here?')
-        elif run[0] == num_steps:
+        elif run[0] == num_steps - 1:
             print('should be done now')
             optimizer.step(closure)
         else:
