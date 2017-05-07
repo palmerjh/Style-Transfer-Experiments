@@ -504,8 +504,11 @@ def run_style_transfer(cnn, content_img, style_img, input_img, outfile, num_step
             return total_score
 
         # don't ask me why this is required cuz I don't know
-        if run[0] >= num_steps:
+        if run[0] > num_steps:
             print('Why am I here?')
+        elif run[0] == num_steps:
+            print('should be done now')
+            optimizer.step(closure)
         else:
             optimizer.step(closure)
 
