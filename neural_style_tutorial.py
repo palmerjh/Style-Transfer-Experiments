@@ -1,4 +1,7 @@
 # -*- coding: utf-8 -*-
+
+# NOTE: borrowed heavily from http://pytorch.org/tutorials/advanced/neural_style_tutorial.html
+
 """
 Neural Transfer with PyTorch
 ============================
@@ -32,106 +35,11 @@ measures how different is the style between two images. Then, we take a
 third image, the input, (e.g. a with noise), and we transform it in
 order to both minimize its content-distance with the content-image and
 its style-distance with the style-image.
-
-OK. How does it work?
-^^^^^^^^^^^^^^^^^^^^^
-
-Well, going further requires some mathematics. Let :math:`C_{nn}` be a
-pre-trained deep convolutional neural network and :math:`X` be any
-image. :math:`C_{nn}(X)` is the network fed by :math:`X` (containing
-feature maps at all layers). Let :math:`F_{XL} \in C_{nn}(X)` be the
-feature maps at depth layer :math:`L`, all vectorized and concatenated
-in one single vector. We simply define the content of :math:`X` at layer
-:math:`L` by :math:`F_{XL}`. Then, if :math:`Y` is another image of same
-the size than :math:`X`, we define the distance of content at layer
-:math:`L` as follow:
-
-.. math:: D_C^L(X,Y) = \|F_{XL} - F_{YL}\|^2 = \sum_i (F_{XL}(i) - F_{YL}(i))^2
-
-Where :math:`F_{XL}(i)` is the :math:`i^{th}` element of :math:`F_{XL}`.
-The style is a bit less trivial to define. Let :math:`F_{XL}^k` with
-:math:`k \leq K` be the vectorized :math:`k^{th}` of the :math:`K`
-feature maps at layer :math:`L`. The style :math:`G_{XL}` of :math:`X`
-at layer :math:`L` is defined by the Gram produce of all vectorized
-feature maps :math:`F_{XL}^k` with :math:`k \leq K`. In other words,
-:math:`G_{XL}` is a :math:`K`\ x\ :math:`K` matrix and the element
-:math:`G_{XL}(k,l)` at the :math:`k^{th}` line and :math:`l^{th}` column
-of :math:`G_{XL}` is the vectorial produce between :math:`F_{XL}^k` and
-:math:`F_{XL}^l` :
-
-.. math::
-
-    G_{XL}(k,l) = \langle F_{XL}^k, F_{XL}^l\\rangle = \sum_i F_{XL}^k(i) . F_{XL}^l(i)
-
-Where :math:`F_{XL}^k(i)` is the :math:`i^{th}` element of
-:math:`F_{XL}^k`. We can see :math:`G_{XL}(k,l)` as a measure of the
-correlation between feature maps :math:`k` and :math:`l`. In that way,
-:math:`G_{XL}` represents the correlation matrix of feature maps of
-:math:`X` at layer :math:`L`. Note that the size of :math:`G_{XL}` only
-depends on the number of feature maps, not on the size of :math:`X`.
-Then, if :math:`Y` is another image *of any size*, we define the
-distance of style at layer :math:`L` as follow:
-
-.. math::
-
-    D_S^L(X,Y) = \|G_{XL} - G_{YL}\|^2 = \sum_{k,l} (F_{XL}(k,l) - F_{YL}(k,l))^2
-
-In order to minimize in one shot :math:`D_C(X,C)` between a variable
-image :math:`X` and target content-image :math:`C` and :math:`D_S(X,S)`
-between :math:`X` and target style-image :math:`S`, both computed at
-several layers , we compute and sum the gradients (derivative with
-respect to :math:`X`) of each distance at each wanted layer:
-
-.. math::
-
-    \\nabla_{\textit{total}}(X,S,C) = \sum_{L_C} w_{CL_C}.\\nabla_{\textit{content}}^{L_C}(X,C) + \sum_{L_S} w_{SL_S}.\\nabla_{\textit{style}}^{L_S}(X,S)
-
-Where :math:`L_C` and :math:`L_S` are respectivement the wanted layers
-(arbitrary stated) of content and style and :math:`w_{CL_C}` and
-:math:`w_{SL_S}` the weights (arbitrary stated) associated with the
-style or the content at each wanted layer. Then, we run a gradient
-descent over :math:`X`:
-
-.. math:: X \leftarrow X - \\alpha \\nabla_{\textit{total}}(X,S,C)
-
-Ok. That's enough with maths. If you want to go deeper (how to compute
-the gradients) **we encourage you to read the original paper** by Leon
-A. Gatys and AL, where everything is much better and much clearer
-explained.
-
-For our implementation in PyTorch, we already have everything
-we need: indeed, with PyTorch, all the gradients are automatically and
-dynamically computed for you (while you use functions from the library).
-This is why the implementation of this algorithm becomes very
-confortable with PyTorch.
-
-PyTorch implementation
-----------------------
-
-If you are not sure to understand all the mathematics above, you will
-probably get it by implementing it. If you are discovering PyTorch, we
-recommend you to first read this :doc:`Introduction to
-PyTorch </beginner/deep_learning_60min_blitz>`.
-
-Packages
-~~~~~~~~
-
-We will have recourse to the following packages:
-
--  ``torch``, ``torch.nn``, ``numpy`` (indispensables packages for
-   neural networks with PyTorch)
--  ``torch.autograd.Variable`` (dynamic computation of the gradient wrt
-   a variable)
--  ``torch.optim`` (efficient gradient descents)
--  ``PIL``, ``PIL.Image``, ``matplotlib.pyplot`` (load and display
-   images)
--  ``torchvision.transforms`` (treat PIL images and transform into torch
-   tensors)
--  ``torchvision.models`` (train or load pre-trained models)
--  ``copy`` (to deep copy the models; system package)
 """
 
 from __future__ import print_function
+
+import os
 
 import torch
 import torch.nn as nn
@@ -146,6 +54,42 @@ import torchvision.models as models
 
 import copy
 
+content_dir = 'content'
+styles_dir = 'styles'
+
+results_dir = 'results'
+
+square_styles = ['field',
+                 'clouds'
+                 'mountain',
+                 'stars_square',
+                 'stars2_square',
+                 'stars3_square',
+                 'aurora_square',
+                 'aurora2_square',
+                 'aurora3_square',
+                 'aurora4_square',
+                 'trippy',
+                 'trippy2',
+                 'trippy3',
+                 'trippy4',
+                 'tree_square',
+                 'cloth_square',
+                 'bourbon_square']
+
+content_style_dict = { 'jerbear'    : square_styles,
+                       'vegan_pug'    : square_styles,
+                       'julianna_dog'    : square_styles,
+                       'goat_square'    : square_styles,
+                       'gothic_square'    : square_styles,
+                       'gorgeous_square'    : square_styles,
+                       'wwoof_square'    : square_styles,
+                       'plantation'    : square_styles
+}
+
+# desired depth layers to compute style/content losses :
+content_layers_default = ['conv_4']
+style_layers_default = ['conv_1', 'conv_2', 'conv_3', 'conv_4', 'conv_5']
 
 ######################################################################
 # Cuda
@@ -199,14 +143,6 @@ def image_loader(image_name):
     return image
 
 
-style_img = image_loader("styles/field.jpg").type(dtype)
-
-content_img = image_loader("suze_test/jerbear.jpg").type(dtype)
-
-assert style_img.size() == content_img.size(), \
-    "we need to import style and content images of the same size"
-
-
 ######################################################################
 # Imported PIL images has values between 0 and 255. Transformed into torch
 # tensors, their values are between 0 and 1. This is an important detail:
@@ -245,16 +181,6 @@ def imsave(tensor, fname):
     image = unloader(image)
 
     image.save(fname)
-
-
-# plt.figure()
-# imshow(style_img.data, title='Style Image')
-imsave(style_img.data, 'style.jpg')
-
-# plt.figure()
-# imshow(content_img.data, title='Content Image')
-imsave(content_img.data, 'content.jpg')
-
 
 ######################################################################
 # Content loss
@@ -379,43 +305,6 @@ class StyleLoss(nn.Module):
         self.loss.backward(retain_variables=retain_variables)
         return self.loss
 
-
-######################################################################
-# Load the neural network
-# ~~~~~~~~~~~~~~~~~~~~~~~
-#
-# Now, we have to import a pre-trained neural network. As in the paper, we
-# are going to use a pretrained VGG network with 19 layers (VGG19).
-#
-# PyTorch's implementation of VGG is a module divided in two child
-# ``Sequential`` modules: ``features`` (containing convolution and pooling
-# layers) and ``classifier`` (containing fully connected layers). We are
-# just interested by ``features``:
-#
-
-cnn = models.vgg19(pretrained=True).features
-
-# move it to the GPU if possible:
-if use_cuda:
-    cnn = cnn.cuda()
-
-
-######################################################################
-# A ``Sequential`` module contains an ordered list of child modules. For
-# instance, ``vgg19.features`` contains a sequence (Conv2d, ReLU,
-# Maxpool2d, Conv2d, ReLU...) aligned in the right order of depth. As we
-# said in *Content loss* section, we wand to add our style and content
-# loss modules as additive 'transparent' layers in our network, at desired
-# depths. For that, we construct a new ``Sequential`` module, in wich we
-# are going to add modules from ``vgg19`` and our loss modules in the
-# right order:
-#
-
-# desired depth layers to compute style/content losses :
-content_layers_default = ['conv_4']
-style_layers_default = ['conv_1', 'conv_2', 'conv_3', 'conv_4', 'conv_5']
-
-
 def get_style_model_and_losses(cnn, style_img, content_img,
                                style_weight=1000, content_weight=1,
                                content_layers=content_layers_default,
@@ -499,24 +388,6 @@ def get_style_model_and_losses(cnn, style_img, content_img,
 #        # model.add_module(name,avgpool)
 
 
-######################################################################
-# Input image
-# ~~~~~~~~~~~
-#
-# Again, in order to simplify the code, we take an image of the same
-# dimensions than content and style images. This image can be a white
-# noise, or it can also be a copy of the content-image.
-#
-
-input_img = content_img.clone()
-# if you want to use a white noise instead uncomment the below line:
-# input_img = Variable(torch.randn(content_img.data.size())).type(dtype)
-
-# add the original input image to the figure:
-# plt.figure()
-# imshow(input_img.data, title='Input Image')
-imsave(input_img.data, 'input.jpg')
-
 
 ######################################################################
 # Gradient descent
@@ -561,13 +432,24 @@ def get_input_param_optimizer(input_img):
 # the 0-1 interval.
 #
 
-def run_style_transfer(cnn, content_img, style_img, input_img, num_steps=600,
-                       style_weight=1000, content_weight=1):
+def run_style_transfer(cnn, content_img, style_img, input_img, outfile, num_steps=600,
+                       style_weight=1000, content_weight=1, findMin=True):
     """Run the style transfer."""
+    if findMin:
+        print('First run over max epochs...')
+    else:
+        print('Second run over optimum epochs...')
+
     print('Building the style transfer model..')
     model, style_losses, content_losses = get_style_model_and_losses(cnn,
         style_img, content_img, style_weight, content_weight)
     input_param, optimizer = get_input_param_optimizer(input_img)
+
+    # keeps track of what number of epochs yields the minimum score
+    min_nEpochs = [0, 10000]
+
+    if findMin:
+        out = open(outfile, 'w')
 
     print('Optimizing..')
     run = [0]
@@ -588,30 +470,93 @@ def run_style_transfer(cnn, content_img, style_img, input_img, num_steps=600,
                 content_score += cl.backward()
 
             run[0] += 1
+            total_score = style_score + style_score
+            if total_score < min_nEpochs[1]:
+                min_nEpochs[0] = run[0]
+                min_nEpochs[1] = total_score
+
             if run[0] % 50 == 0:
-                print("run {}:".format(run))
-                print('Style Loss : {:4f} Content Loss: {:4f}'.format(
-                    style_score.data[0], content_score.data[0]))
+                out1 = "run {}:".format(run)
+                print(out1)
+                out2 = 'Style Loss : {:4f} Content Loss: {:4f}'.format(
+                    style_score.data[0], content_score.data[0])
+                print(out2)
                 print()
 
-            return style_score + style_score
+                if findMin:
+                    out.write(out1 + '\n')
+                    out.write(out2 + '\n\n')
+
+            return total_score
 
         optimizer.step(closure)
 
     # a last correction...
     input_param.data.clamp_(0, 1)
 
+    if findMin:
+        out.close()
+        # overtrained....need to redo learning up until optimal number of epochs
+        if not (num_steps == min_nEpochs[0]):
+            return run_style_transfer(cnn, content_img, style_img, input_img, outfile,
+                                num_steps=min_nEpochs[0], findMin=False)
+
     return input_param.data
 
 ######################################################################
 # Finally, run the algorithm
 
-output = run_style_transfer(cnn, content_img, style_img, input_img)
+def main():
+    cnn = models.vgg19(pretrained=True).features
+    # move it to the GPU if possible:
+    if use_cuda:
+        cnn = cnn.cuda()
 
-# plt.figure()
-# imshow(output, title='Output Image')
-imsave(output, 'output.jpg')
+    for i, content in enumerate(content_style_dict.keys()):
+        c_folder = os.path.join(results_dir, content)
+        if not os.path.exists(c_folder):
+            os.mkdir(c_folder)
 
-# sphinx_gallery_thumbnail_number = 4
-# plt.ioff()
-# plt.show()
+        print('\n\nTransforming %s.....(%d / %d)' % (content, i, len(content_style_dict)))
+
+        content_img = image_loader(os.path.join(content_dir,'%s.jpg' % content)).type(dtype)
+        imsave(content_img.data, os.path.join(c_folder, 'content.jpg'))
+
+        for j, style in enumerate(content_style_dict[content]):
+            s_folder = os.path.join(c_folder, style)
+            if not os.path.exists(s_folder):
+                os.mkdir(s_folder)
+
+            style_img = image_loader(os.path.join(styles_dir,'%s.jpg' % style)).type(dtype)
+            assert style_img.size() == content_img.size(), \
+                "we need to import style and content images of the same size"
+
+            print('\n.....Using %s style......(%d / %d)\n' % (style, j, len(content_style_dict[content])))
+            # save content again at this level
+            imsave(content_img.data, os.path.join(s_folder, 'content.jpg'))
+            imsave(style_img.data, os.path.join(s_folder,'style.jpg'))
+
+
+            input_img = content_img.clone()
+            # if you want to use a white noise instead uncomment the below line:
+            # input_img = Variable(torch.randn(content_img.data.size())).type(dtype)
+
+            # add the original input image to the figure:
+            # plt.figure()
+            # imshow(input_img.data, title='Input Image')
+            # imsave(input_img.data, 'input.jpg')
+
+            outfile = os.path.join(s_folder,'records.txt')
+
+            # output = run_style_transfer(cnn, content_img, style_img, input_img, outfile)
+
+            # plt.figure()
+            # imshow(output, title='Output Image')
+            # imsave(output, os.path.join(s_folder,'output.jpg'))
+
+            # sphinx_gallery_thumbnail_number = 4
+            # plt.ioff()
+            # plt.show()
+
+if __name__ == '__main__':
+    main()
