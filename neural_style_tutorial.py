@@ -478,8 +478,8 @@ def run_style_transfer(cnn, content_img, style_img, input_img, outfile, num_step
 
             run[0] += 1
             total_score = style_score + style_score
-            print(total_score)
-            total_score_scalar = total_score.data[0][0]
+            #print(total_score)
+            total_score_scalar = total_score.data[0]
             if total_score_scalar < min_nEpochs[1]:
                 min_nEpochs[0] = run[0]
                 min_nEpochs[1] = total_score_scalar
