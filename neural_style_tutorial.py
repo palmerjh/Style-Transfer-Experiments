@@ -515,7 +515,7 @@ def main():
     for i, content in enumerate(content_style_dict.keys()):
         c_folder = os.path.join(results_dir, content)
         if not os.path.exists(c_folder):
-            os.mkdir(c_folder)
+            os.mkdirs(c_folder)
 
         print('\n\nTransforming %s.....(%d / %d)' % (content, i, len(content_style_dict)))
 
