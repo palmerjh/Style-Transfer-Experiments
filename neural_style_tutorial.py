@@ -432,7 +432,7 @@ def get_input_param_optimizer(input_img):
 # the 0-1 interval.
 #
 
-def run_style_transfer(cnn, content_img, style_img, input_img, outfile, num_steps=52,
+def run_style_transfer(cnn, content_img, style_img, input_img, outfile, num_steps=600,
                        style_weight=1000, content_weight=1, findMin=True):
     """Run the style transfer."""
     if findMin:
@@ -454,7 +454,7 @@ def run_style_transfer(cnn, content_img, style_img, input_img, outfile, num_step
 
     # keeps track of what number of epochs yields the minimum score
     min_nEpochs = [0, 10000]
-    cur_nEpochs = [0, 0]
+    # cur_nEpochs = [0, 0]
 
     if findMin:
         out = open(outfile, 'w')
@@ -485,21 +485,21 @@ def run_style_transfer(cnn, content_img, style_img, input_img, outfile, num_step
             if total_score_scalar < min_nEpochs[1]:
                 min_nEpochs[0] = run[0]
                 min_nEpochs[1] = total_score_scalar
-
-            # don't ask me why this is required cuz I don't know
-            if run[0] > num_steps:
-                print('Why am I here?')
-                return Variable(torch.Tensor([0.0]))
-            elif run[0] == num_steps:
-                print('should be done now')
-                #optimizer.step(closure)
-            else:
-                pass
-                #optimizer.step(closure)
-
+            #
+            # # don't ask me why this is required cuz I don't know
+            # if run[0] > num_steps:
+            #     print('Why am I here?')
+            #     return Variable(torch.Tensor([0.0]))
+            # elif run[0] == num_steps:
+            #     print('should be done now')
+            #     #optimizer.step(closure)
+            # else:
+            #     pass
+            #     #optimizer.step(closure)
+            #
             cur_nEpochs[0] = run[0]
             cur_nEpochs[1] = total_score_scalar
-
+            #
             if run[0] % 10 == 0:
                 print('cur: %d\t%f' % (run[0], total_score_scalar))
                 print('min: %d\t%f' % (min_nEpochs[0], min_nEpochs[1]))
@@ -520,10 +520,10 @@ def run_style_transfer(cnn, content_img, style_img, input_img, outfile, num_step
 
         optimizer.step(closure)
 
-    print(cur_nEpochs == min_nEpochs)
-
     # a last correction...
     input_param.data.clamp_(0, 1)
+
+    print(cur_nEpochs == min_nEpochs)
 
     # make nEpochs divisible by 20 to avoid overtraining by closure
     min_nEpochs[0] -= min_nEpochs[0] % 20
