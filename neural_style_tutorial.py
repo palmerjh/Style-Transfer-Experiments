@@ -486,17 +486,19 @@ def run_style_transfer(cnn, content_img, style_img, input_img, outfile, num_step
                 min_nEpochs[0] = run[0]
                 min_nEpochs[1] = total_score_scalar
 
-            cur_nEpochs = [run[0], total_score_scalar]
-
             # don't ask me why this is required cuz I don't know
             if run[0] > num_steps:
                 print('Why am I here?')
+                return Variable(torch.Tensor([0.0]))
             elif run[0] == num_steps:
                 print('should be done now')
                 #optimizer.step(closure)
             else:
                 pass
                 #optimizer.step(closure)
+
+            cur_nEpochs[0] = run[0]
+            cur_nEpochs[1] = total_score_scalar
 
             if run[0] % 10 == 0:
                 print('cur: %d\t%f' % (run[0], total_score_scalar))
