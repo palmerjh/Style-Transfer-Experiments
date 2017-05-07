@@ -454,6 +454,7 @@ def run_style_transfer(cnn, content_img, style_img, input_img, outfile, num_step
 
     # keeps track of what number of epochs yields the minimum score
     min_nEpochs = [0, 10000]
+    cur_nEpochs = [0, 0]
 
     if findMin:
         out = open(outfile, 'w')
@@ -485,6 +486,8 @@ def run_style_transfer(cnn, content_img, style_img, input_img, outfile, num_step
                 min_nEpochs[0] = run[0]
                 min_nEpochs[1] = total_score_scalar
 
+            cur_nEpochs = [run[0], total_score_scalar]
+
             # don't ask me why this is required cuz I don't know
             if run[0] > num_steps:
                 print('Why am I here?')
@@ -515,9 +518,9 @@ def run_style_transfer(cnn, content_img, style_img, input_img, outfile, num_step
 
         # don't ask me why this is required cuz I don't know
         if run[0] >= num_steps:
-            print('Why am I here?')
+            print('outside - Why am I here?')
         elif run[0] == num_steps - 1:
-            print('should be done now')
+            print('outside - should be done now')
             optimizer.step(closure)
         else:
             optimizer.step(closure)
@@ -526,6 +529,8 @@ def run_style_transfer(cnn, content_img, style_img, input_img, outfile, num_step
     input_param.data.clamp_(0, 1)
 
     print(min_nEpochs)
+    print(cur_nEpochs)
+    print(cur_nEpochs == min_nEpochs)
 
     if findMin:
         out.close()
