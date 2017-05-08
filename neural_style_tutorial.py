@@ -57,7 +57,7 @@ import copy
 content_dir = 'content'
 styles_dir = 'styles'
 
-results_dir = 'results'
+results_dir = 'new_results'
 
 square_styles = ['field',
                  'clouds',
@@ -77,14 +77,19 @@ square_styles = ['field',
                  'cloth_square',
                  'bourbon_square']
 
-content_style_dict = { 'jerbear'    : square_styles,
-                       'vegan_pug'    : square_styles,
-                       'julianna_dog'    : square_styles,
-                       'goat_square'    : square_styles,
-                       'gothic_square'    : square_styles,
-                       'gorgeous_square'    : square_styles,
-                       'wwoof_square'    : square_styles,
-                       'plantation'    : square_styles
+coolest_square_styles = ['mountain',
+                         'stars_square',
+                         'stars3_square',
+                         'trippy',
+                         'trippy2',
+                         'tree_square',
+                         'cloth_square']
+
+content_style_dict = { 'tristan'    : coolest_square_styles,
+                       'ania'    : coolest_square_styles,
+                       'tristania'    : coolest_square_styles,
+                       'white'    : square_styles,
+                       'black'    : square_styles
 }
 
 # desired depth layers to compute style/content losses :
