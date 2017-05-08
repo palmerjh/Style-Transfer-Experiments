@@ -34,3 +34,5 @@ Style Loss : 0.216485 Content Loss: 1.020360
 run [600]:
 Style Loss : 0.153809 Content Loss: 0.933333
 
+Optimum epochs: 600
+
