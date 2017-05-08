@@ -575,7 +575,7 @@ def main():
             assert style_img.size() == content_img.size(), \
                 "we need to import style and content images of the same size"
 
-            print('\n.....Using %s style......(%d / %d)\n' % (style, j+1, len(content_style_dict[content])))
+            print('\n.....Using %s style......(%d / %d); content: %s (%d / %d)\n' % (style, j+1, len(content_style_dict[content]),content, i+1, len(content_style_dict)))
             # save content again at this level
             imsave(content_img.data, os.path.join(s_folder, 'content.jpg'))
             imsave(style_img.data, os.path.join(s_folder,'style.jpg'))
