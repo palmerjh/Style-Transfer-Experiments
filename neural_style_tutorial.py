@@ -82,14 +82,13 @@ coolest_square_styles = ['mountain',
                          'stars3_square',
                          'trippy',
                          'trippy2',
-                         'tree_square',
-                         'cloth_square']
+                         'tree_square']
 
-content_style_dict = { 'tristan'    : coolest_square_styles,
-                       'ania'    : coolest_square_styles,
+content_style_dict = { 'ania'    : coolest_square_styles,
                        'tristania'    : coolest_square_styles,
                        'white'    : square_styles,
-                       'black'    : square_styles
+                       'black'    : square_styles,
+                       'random'    : square_styles
 }
 
 # desired depth layers to compute style/content losses :
