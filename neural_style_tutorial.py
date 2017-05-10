@@ -75,20 +75,30 @@ square_styles = ['field',
                  'trippy4',
                  'tree_square',
                  'cloth_square',
-                 'bourbon_square']
+                 'bourbon_square',
+                 'waterfall',
+                 'waterfall2',
+                 'waterfall3',
+                 'waterfall4']
 
 coolest_square_styles = ['mountain',
                          'stars_square',
                          'stars3_square',
                          'trippy',
                          'trippy2',
-                         'tree_square']
+                         'tree_square',
+                         'waterfall',
+                         'waterfall2',
+                         'waterfall3',
+                         'waterfall4']
 
-content_style_dict = { 'ania'    : coolest_square_styles,
-                       'tristania'    : coolest_square_styles,
-                       'white'    : square_styles,
-                       'black'    : square_styles,
-                       'random'    : square_styles
+content_style_dict = { 'hula'    : coolest_square_styles,
+                       'marc'    : coolest_square_styles,
+                       'pete_freida'    : coolest_square_styles,
+                       'dad_nancy'    : coolest_square_styles,
+                       'josh_waterfall'    : coolest_square_styles,
+                       'josh_tdawg_santa'    : coolest_square_styles,
+                       'molly'    : coolest_square_styles
 }
 
 # desired depth layers to compute style/content losses :
@@ -576,8 +586,8 @@ def main():
 
             print('\n.....Using %s style......(%d / %d); content: %s (%d / %d)\n' % (style, j+1, len(content_style_dict[content]),content, i+1, len(content_style_dict)))
             # save content again at this level
-            imsave(content_img.data, os.path.join(s_folder, 'content.jpg'))
-            imsave(style_img.data, os.path.join(s_folder,'style.jpg'))
+            #imsave(content_img.data, os.path.join(s_folder, 'content.jpg'))
+            #imsave(style_img.data, os.path.join(s_folder,'style.jpg'))
 
 
             input_img = content_img.clone()
@@ -591,7 +601,7 @@ def main():
 
             outfile = os.path.join(s_folder,'records.txt')
 
-            output = run_style_transfer(cnn, content_img, style_img, input_img, outfile)
+            #output = run_style_transfer(cnn, content_img, style_img, input_img, outfile)
 
             # plt.figure()
             # imshow(output, title='Output Image')
