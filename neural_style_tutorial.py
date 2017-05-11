@@ -573,7 +573,8 @@ def main():
 
         print('\n\nTransforming %s.....(%d / %d)' % (content, i+1, len(content_style_dict)))
 
-        content_img = image_loader(os.path.join(content_dir,'%s.jpg' % content)).type(dtype)
+        #content_img = image_loader(os.path.join(content_dir,'%s.jpg' % content)).type(dtype)
+        content_img = image_loader(os.path.join(content_dir, content)).type(dtype)
         imsave(content_img.data, os.path.join(c_folder, 'content.jpg'))
 
         #for j, style in enumerate(content_style_dict[content]):
