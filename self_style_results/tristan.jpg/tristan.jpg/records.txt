@@ -1,0 +1,27 @@
+run [50]:
+Style Loss : 0.000000 Content Loss: 0.000000
+
+run [100]:
+Style Loss : 0.000000 Content Loss: 0.000000
+
+run [150]:
+Style Loss : 0.000000 Content Loss: 0.000000
+
+run [200]:
+Style Loss : 0.000000 Content Loss: 0.000000
+
+run [250]:
+Style Loss : 0.000000 Content Loss: 0.000000
+
+run [300]:
+Style Loss : 0.000000 Content Loss: 0.000000
+
+run [350]:
+Style Loss : 0.000000 Content Loss: 0.000000
+
+run [400]:
+Style Loss : 0.000000 Content Loss: 0.000000
+
+run [450]:
+Style Loss : 0.000000 Content Loss: 0.000000
+
