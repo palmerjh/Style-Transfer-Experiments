@@ -57,7 +57,7 @@ import copy
 content_dir = 'content'
 styles_dir = 'styles'
 
-results_dir = 'self_style_results'
+results_dir = 'random_start_results'
 
 square_styles = ['field',
                  'clouds',
@@ -93,12 +93,12 @@ coolest_square_styles = ['mountain',
                          'waterfall4']
 
 content_style_dict = { 'dad_nancy_condao'    : coolest_square_styles,
-                       'xmas'    : coolest_square_styles
-                    #    'pete_freida'    : coolest_square_styles,
-                    #    'dad_nancy'    : coolest_square_styles,
-                    #    'josh_waterfall'    : coolest_square_styles,
-                    #    'josh_tdawg_santa'    : coolest_square_styles,
-                    #    'molly'    : coolest_square_styles
+                       'gothic_square'    : coolest_square_styles,
+                       'pete_freida'    : coolest_square_styles,
+                       'wwoof_square'    : coolest_square_styles,
+                       'josh_waterfall'    : coolest_square_styles,
+                       'josh_tdawg_santa'    : coolest_square_styles,
+                       'molly'    : coolest_square_styles
 }
 
 # desired depth layers to compute style/content losses :
@@ -565,42 +565,42 @@ def main():
     if use_cuda:
         cnn = cnn.cuda()
 
-    content_pics = os.listdir(os.path.join(os.getcwd(),content_dir))
+    # content_pics = os.listdir(os.path.join(os.getcwd(),content_dir))
 
-    #for i, content in enumerate(content_style_dict.keys()):
-    for i, content in enumerate(content_pics):
+    for i, content in enumerate(content_style_dict.keys()):
+        # for i, content in enumerate(content_pics):
         c_folder = os.path.join(results_dir, content)
         if not os.path.exists(c_folder):
             os.makedirs(c_folder)
 
-        #print('\n\nTransforming %s.....(%d / %d)' % (content, i+1, len(content_style_dict)))
-        print('\n\nTransforming %s.....(%d / %d)' % (content, i+1, len(content_pics)))
+        print('\n\nTransforming %s.....(%d / %d)' % (content, i+1, len(content_style_dict)))
+        # print('\n\nTransforming %s.....(%d / %d)' % (content, i+1, len(content_pics)))
 
-        #content_img = image_loader(os.path.join(content_dir,'%s.jpg' % content)).type(dtype)
-        content_img = image_loader(os.path.join(content_dir, content)).type(dtype)
+        content_img = image_loader(os.path.join(content_dir,'%s.jpg' % content)).type(dtype)
+        # content_img = image_loader(os.path.join(content_dir, content)).type(dtype)
         imsave(content_img.data, os.path.join(c_folder, 'content.jpg'))
 
-        #for j, style in enumerate(content_style_dict[content]):
-        for j, style in enumerate([content]):
+        for j, style in enumerate(content_style_dict[content]):
+            # for j, style in enumerate([content]):
             s_folder = os.path.join(c_folder, style)
             if not os.path.exists(s_folder):
                 os.mkdir(s_folder)
 
-            #style_img = image_loader(os.path.join(styles_dir,'%s.jpg' % style)).type(dtype)
-            style_img = content_img.clone()
+            style_img = image_loader(os.path.join(styles_dir,'%s.jpg' % style)).type(dtype)
+            # style_img = content_img.clone()
             assert style_img.size() == content_img.size(), \
                 "we need to import style and content images of the same size"
 
-            # print('\n.....Using %s style......(%d / %d); content: %s (%d / %d)\n' % (style, j+1, len(content_style_dict[content]),content, i+1, len(content_style_dict)))
-            print('\n.....Using %s style......(%d / %d); content: %s (%d / %d)\n' % (style, j+1, 1, content, i+1, len(content_pics)))
+            print('\n.....Using %s style......(%d / %d); content: %s (%d / %d)\n' % (style, j+1, len(content_style_dict[content]),content, i+1, len(content_style_dict)))
+            # print('\n.....Using %s style......(%d / %d); content: %s (%d / %d)\n' % (style, j+1, 1, content, i+1, len(content_pics)))
             # save content again at this level
             #imsave(content_img.data, os.path.join(s_folder, 'content.jpg'))
             #imsave(style_img.data, os.path.join(s_folder,'style.jpg'))
 
 
-            input_img = content_img.clone()
+            # input_img = content_img.clone()
             # if you want to use a white noise instead uncomment the below line:
-            # input_img = Variable(torch.randn(content_img.data.size())).type(dtype)
+            input_img = Variable(torch.randn(content_img.data.size())).type(dtype)
 
             # add the original input image to the figure:
             # plt.figure()
