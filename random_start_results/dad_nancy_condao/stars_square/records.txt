@@ -1,0 +1,30 @@
+run [50]:
+Style Loss : 2.914520 Content Loss: 4.855491
+
+run [100]:
+Style Loss : 0.639141 Content Loss: 3.246778
+
+run [150]:
+Style Loss : 0.296977 Content Loss: 2.495956
+
+run [200]:
+Style Loss : 0.209867 Content Loss: 2.104795
+
+run [250]:
+Style Loss : 0.182775 Content Loss: 1.914280
+
+run [300]:
+Style Loss : 0.163721 Content Loss: 1.826929
+
+run [350]:
+Style Loss : 0.142867 Content Loss: 1.782548
+
+run [400]:
+Style Loss : 0.160496 Content Loss: 1.746598
+
+run [450]:
+Style Loss : 0.133343 Content Loss: 1.734413
+
+run [500]:
+Style Loss : 0.288086 Content Loss: 1.804498
+
