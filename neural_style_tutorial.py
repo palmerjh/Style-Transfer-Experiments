@@ -601,7 +601,7 @@ def main():
 
             outfile = os.path.join(s_folder,'records.txt')
 
-            #output = run_style_transfer(cnn, content_img, style_img, input_img, outfile)
+            output = run_style_transfer(cnn, content_img, style_img, input_img, outfile)
 
             # plt.figure()
             # imshow(output, title='Output Image')
