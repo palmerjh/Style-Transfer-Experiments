@@ -57,7 +57,7 @@ import copy
 content_dir = 'content'
 styles_dir = 'styles'
 
-results_dir = 'new_results'
+results_dir = 'self_style_results'
 
 square_styles = ['field',
                  'clouds',
@@ -565,7 +565,8 @@ def main():
     if use_cuda:
         cnn = cnn.cuda()
 
-    for i, content in enumerate(content_style_dict.keys()):
+    #for i, content in enumerate(content_style_dict.keys()):
+    for i, content in enumerate(os.listdir(os.path.join(os.getcwd(),content_dir))):
         c_folder = os.path.join(results_dir, content)
         if not os.path.exists(c_folder):
             os.makedirs(c_folder)
@@ -575,12 +576,14 @@ def main():
         content_img = image_loader(os.path.join(content_dir,'%s.jpg' % content)).type(dtype)
         imsave(content_img.data, os.path.join(c_folder, 'content.jpg'))
 
-        for j, style in enumerate(content_style_dict[content]):
+        #for j, style in enumerate(content_style_dict[content]):
+        for j, style in enumerate([content]):
             s_folder = os.path.join(c_folder, style)
             if not os.path.exists(s_folder):
                 os.mkdir(s_folder)
 
-            style_img = image_loader(os.path.join(styles_dir,'%s.jpg' % style)).type(dtype)
+            #style_img = image_loader(os.path.join(styles_dir,'%s.jpg' % style)).type(dtype)
+            style_img = content_img.clone()
             assert style_img.size() == content_img.size(), \
                 "we need to import style and content images of the same size"
 
