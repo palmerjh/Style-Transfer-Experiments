@@ -565,13 +565,16 @@ def main():
     if use_cuda:
         cnn = cnn.cuda()
 
+    content_pics = os.listdir(os.path.join(os.getcwd(),content_dir))
+
     #for i, content in enumerate(content_style_dict.keys()):
-    for i, content in enumerate(os.listdir(os.path.join(os.getcwd(),content_dir))):
+    for i, content in enumerate(content_pics):
         c_folder = os.path.join(results_dir, content)
         if not os.path.exists(c_folder):
             os.makedirs(c_folder)
 
-        print('\n\nTransforming %s.....(%d / %d)' % (content, i+1, len(content_style_dict)))
+        #print('\n\nTransforming %s.....(%d / %d)' % (content, i+1, len(content_style_dict)))
+        print('\n\nTransforming %s.....(%d / %d)' % (content, i+1, len(content_pics)))
 
         #content_img = image_loader(os.path.join(content_dir,'%s.jpg' % content)).type(dtype)
         content_img = image_loader(os.path.join(content_dir, content)).type(dtype)
@@ -588,7 +591,8 @@ def main():
             assert style_img.size() == content_img.size(), \
                 "we need to import style and content images of the same size"
 
-            print('\n.....Using %s style......(%d / %d); content: %s (%d / %d)\n' % (style, j+1, len(content_style_dict[content]),content, i+1, len(content_style_dict)))
+            # print('\n.....Using %s style......(%d / %d); content: %s (%d / %d)\n' % (style, j+1, len(content_style_dict[content]),content, i+1, len(content_style_dict)))
+            print('\n.....Using %s style......(%d / %d); content: %s (%d / %d)\n' % (style, j+1, 1, content, i+1, len(content_pics)))
             # save content again at this level
             #imsave(content_img.data, os.path.join(s_folder, 'content.jpg'))
             #imsave(style_img.data, os.path.join(s_folder,'style.jpg'))
