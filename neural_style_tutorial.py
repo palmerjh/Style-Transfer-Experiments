@@ -92,13 +92,13 @@ coolest_square_styles = ['mountain',
                          'waterfall3',
                          'waterfall4']
 
-content_style_dict = { 'hula'    : coolest_square_styles,
-                       'marc'    : coolest_square_styles,
-                       'pete_freida'    : coolest_square_styles,
-                       'dad_nancy'    : coolest_square_styles,
-                       'josh_waterfall'    : coolest_square_styles,
-                       'josh_tdawg_santa'    : coolest_square_styles,
-                       'molly'    : coolest_square_styles
+content_style_dict = { 'dad_nancy_condao'    : coolest_square_styles,
+                       'xmas'    : coolest_square_styles
+                    #    'pete_freida'    : coolest_square_styles,
+                    #    'dad_nancy'    : coolest_square_styles,
+                    #    'josh_waterfall'    : coolest_square_styles,
+                    #    'josh_tdawg_santa'    : coolest_square_styles,
+                    #    'molly'    : coolest_square_styles
 }
 
 # desired depth layers to compute style/content losses :
