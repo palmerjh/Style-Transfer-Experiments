@@ -1,0 +1,38 @@
+run [50]:
+Style Loss : 4.215149 Content Loss: 3.298173
+
+run [100]:
+Style Loss : 3.079567 Content Loss: 3.073794
+
+run [150]:
+Style Loss : 2.156343 Content Loss: 3.002696
+
+run [200]:
+Style Loss : 1.197759 Content Loss: 3.025934
+
+run [250]:
+Style Loss : 0.514335 Content Loss: 3.055712
+
+run [300]:
+Style Loss : 0.329245 Content Loss: 3.267589
+
+run [350]:
+Style Loss : 0.176307 Content Loss: 2.901399
+
+run [400]:
+Style Loss : 3776.724121 Content Loss: 12.531984
+
+run [450]:
+Style Loss : 9.716109 Content Loss: 6.949982
+
+run [500]:
+Style Loss : 2.698020 Content Loss: 5.382328
+
+run [550]:
+Style Loss : 1.110834 Content Loss: 4.277568
+
+run [600]:
+Style Loss : 0.463768 Content Loss: 3.682020
+
+Optimum epochs: 360
+
